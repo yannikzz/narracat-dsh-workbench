@@ -147,7 +147,16 @@ const caseDeny = await put('/novel-workbench/api/file', {
   path: '.NARRACAT/MEMORY/CH-001.json',
   text: '{"protected":false}\n',
 })
-check('case-folded protected path is refused', caseDeny.status === 403, { status: caseDeny.status, body: caseDeny.body })
+// Case folding is a filesystem property: on macOS/Windows the uppercase
+// spelling aliases the protected file and must be refused; on case-sensitive
+// Linux it is a distinct path, so the write is allowed and touches no protected
+// data. Keep the assertion meaningful on both.
+const caseFoldPlatform = process.platform === 'darwin' || process.platform === 'win32'
+check(
+  'case-folded protected path follows filesystem semantics',
+  caseFoldPlatform ? caseDeny.status === 403 : caseDeny.status === 200,
+  { platform: process.platform, status: caseDeny.status, body: caseDeny.body },
+)
 
 // A symlink alias inside the book must not reach a protected directory either.
 await symlink(join(workspace, 'S3', '.narracat', 'memory'), join(workspace, 'S3', 'alias-memory'))
