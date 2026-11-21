@@ -1,0 +1,414 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WritingContextPack",
+  "version": "5.7.0",
+  "description": "novel_build_writing_context_pack 产出的章节写作上下文包，chapter-writer 的唯一上下文来源，continuity-editor 审校时对照消费。builder 纯代码组装：总预算 10-12k token，超限硬截断。连贯性/数据缺口预警写入包内 warnings 喂写手；预算截断与渲染降级的系统诊断不进包、仅经工具返回值回主会话。issue #429（M2R.3）新增可选字段 current_antagonist_agent（arc_meta.antagonist_agent 机械透传，同 current_arc_tension 缺省即省略的可选语义），纯 additive、不影响既有消费方。 ADR-0089 §3 附记（PR #60 审查）：word_count_range 改选填——作品没设每章字数时 2400-3600 只是官方写章方法的参考，关掉官方写章 Skill 就不给；through_storylines 与 storyline_focus 的 type 改选填自由文字、没写就不带（与记忆库第 30 版放宽一致）。下游影响：第③层可重建过程文件，不涉存储迁移；引擎组装按有则给，写手契约不依赖这两项。新增可选 cast（本章出场且已建档的人：人物速写＋档案路径），纯 additive，老包没有它照常消费。",
+  "type": "object",
+  "required": [
+    "target_chapter",
+    "chapter_outline",
+    "world_rules",
+    "style_directive",
+    "previous_chapter_briefs",
+    "through_line_anchor",
+    "arc_summaries",
+    "character_cards",
+    "character_relationships",
+    "foreshadowing_due",
+    "storyline_focus",
+    "semantic_context",
+    "warnings"
+  ],
+  "properties": {
+    "memory_source_revisions": { "type": "object", "description": "构建时实际正文来源版本，以 novel.chapter:N 为键；使用缓存前必须与 novel_memory_source 列表逐项一致。缺少此字段的旧包应重建。", "additionalProperties": { "type": "string" } },
+    "memory_source_coverage": {
+      "type": "object",
+      "description": "来源覆盖说明。legacy_unversioned 为尚无正文版本证明的历史记忆，不能声称已核对；已知过期或缺失来源会在构建前拒绝。",
+      "properties": {
+        "legacy_unversioned_chapters": { "type": "array", "items": { "type": "integer", "minimum": 1 } },
+        "legacy_unversioned_aggregates": { "type": "array", "items": { "type": "object", "properties": { "scope": { "type": "string" }, "scope_id": { "type": "string" } }, "required": ["scope", "scope_id"] } }
+      },
+      "required": ["legacy_unversioned_chapters", "legacy_unversioned_aggregates"]
+    },
+    "target_chapter": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "目标章节号"
+    },
+    "volume": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "所属卷号"
+    },
+    "current_arc_tension": {
+      "type": "string",
+      "minLength": 1,
+      "description": "本 arc 当前悬而未决的核心张力（arc_meta.core_question 的机械透传）。可选字段：arc 缺失或 core_question 未填时省略，写手仅按 chapter_outline + through_line_anchor 写作，行为不变"
+    },
+    "current_antagonist_agent": {
+      "type": "string",
+      "minLength": 1,
+      "description": "本 arc 具体施压者（arc_meta.antagonist_agent 的机械透传）。可选字段：arc 缺失或 antagonist_agent 未填时省略——日常流/无对抗 arc 本就可能没有施压者，写手行为不变"
+    },
+    "word_count_range": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": { "type": "integer" },
+      "description": "目标字数区间 [min, max]：作品设了每章字数按 config.yaml 的 words_per_chapter 推得；没设时只在官方写章 Skill 开着给官方写法的参考 2400-3600（不按它退回），关掉不给"
+    },
+    "chapter_outline": {
+      "type": "string",
+      "description": "本章细纲全文（从 .narracat/data/outline/vol-VV/ch-NNN.json 现渲染）"
+    },
+    "world_rules": {
+      "type": "string",
+      "description": "立项卡的世界规则（按 premise-cards.json 渲染），整份给、不设预算；写手与审校核对「设定违背」的依据；未填写为空串并在 warnings 提示"
+    },
+    "setting_catalog": {
+      "type": "string",
+      "description": "设定目录：开头一行写明位置与文件名规则，然后 bible/world/ 下每份设定文档一行「名字：一句简介」（ADR-0088 附记 §2 #6）；没有设定文档为空串。下游影响：写手与审校据此知道有哪些设定、去哪查"
+    },
+    "named_settings": {
+      "type": "array",
+      "description": "章纲 settings_used 点名的设定文档：每份只给开头（标题与第一段）并标 excerpt、附全文路径（写手与审校要核细节自己读）；找不到的名字进 warnings",
+      "items": {
+        "type": "object",
+        "required": ["name", "path", "text"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "path": { "type": "string" },
+          "text": { "type": "string" },
+          "excerpt": { "type": "boolean", "const": true }
+        }
+      }
+    },
+    "style_directive": {
+      "type": "string",
+      "description": "风格指令一段自然语言：本书的人称与作者定的风格档位名（config.yaml 的 style_profile），只给名字、写手按名字理解；没定档位只写人称"
+    },
+    "previous_chapter_briefs": {
+      "type": "array",
+      "maxItems": 3,
+      "description": "热层：前 3 章 ChapterBrief。写手包只带摘要、结尾片段与未决问句；开头片段、锚点与情绪基调存着不随包给（上一章的自评会把它的冷传给下一章）",
+      "items": {
+        "type": "object",
+        "required": ["chapter"],
+        "properties": {
+          "chapter": {
+            "type": "integer",
+            "description": "章节号"
+          },
+          "summary": {
+            "type": "string",
+            "description": "该章叙事摘要"
+          },
+          "opening_snippet": {
+            "type": "string",
+            "description": "该章开头片段（机械截取）"
+          },
+          "ending_snippet": {
+            "type": "string",
+            "description": "该章结尾片段（机械截取）"
+          },
+          "core_experience": {
+            "type": "string",
+            "description": "该章锚点：核心体验"
+          },
+          "heartbeat_moment": {
+            "type": "string",
+            "description": "该章锚点：心跳时刻"
+          },
+          "emotional_tone": {
+            "type": "string",
+            "description": "该章情绪基调"
+          },
+          "continuation_hook": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "基于该章的未决疑问，可为空；只供后续考虑，不是正史事实或必须发生的情节"
+          }
+        }
+      }
+    },
+    "through_line_anchor": {
+      "type": "object",
+      "required": ["engine_fields", "through_storylines", "core_foreshadowing"],
+      "description": "全书贯穿线常驻层：引擎字段摘要 + 贯穿故事线 + 核心 major 伏笔，独立预算 600 token，永不因 L2 卷滚动窗截断而丢弃；保证远卷（身世/宿敌/全书核心线）写到第 N 章时仍在上下文里",
+      "properties": {
+        "engine_fields": {
+          "type": "array",
+          "description": "全书结构锚点：中心戏剧问题 / 主角核心欲望 / 主角核心缺失 / 对抗力量（从立项卡读，未定的不给）＋ 赌注递增曲线（subject='全书' facts 机械读取）",
+          "items": {
+            "type": "object",
+            "required": ["key", "value"],
+            "properties": {
+              "key": { "type": "string", "description": "引擎字段名（如 central_dramatic_question）" },
+              "value": { "type": "string", "description": "字段内容" }
+            }
+          }
+        },
+        "through_storylines": {
+          "type": "array",
+          "description": "全书贯穿故事线（storylines.is_through_line=1 且未 resolved），永不随卷滚动丢弃",
+          "items": {
+            "type": "object",
+            "required": ["id", "name"],
+            "properties": {
+              "id": { "type": "string", "description": "故事线 id" },
+              "name": { "type": "string", "description": "故事线名称" },
+              "type": { "type": "string", "description": "故事线类型（选填自由文字，没写就不带；官方方法用 main / growth / romance / faction / mystery / rivalry / world / other）" }
+            }
+          }
+        },
+        "core_foreshadowing": {
+          "type": "array",
+          "description": "未兑现的核心 major 伏笔，豁免距离衰减——跨度 >20 章仍持续提醒",
+          "items": {
+            "type": "object",
+            "required": ["id", "description"],
+            "properties": {
+              "id": { "type": "string", "description": "伏笔 id" },
+              "description": { "type": "string", "description": "伏笔内容描述" },
+              "planted_chapter": { "type": "integer", "description": "埋设章号" },
+              "target_reveal": { "type": "string", "description": "计划兑现锚点" }
+            }
+          }
+        }
+      }
+    },
+    "arc_summaries": {
+      "type": "array",
+      "description": "温层：本卷已完成 arc 摘要 + 各前卷摘要",
+      "items": {
+        "type": "object",
+        "required": ["scope", "scope_id", "summary"],
+        "properties": {
+          "scope": {
+            "type": "string",
+            "enum": ["arc", "volume"]
+          },
+          "scope_id": {
+            "type": "string",
+            "description": "arc_id 或卷标识，如 \"V01-A02\" / \"vol-01\""
+          },
+          "chapter_start": {
+            "type": "integer",
+            "description": "区间起始章号"
+          },
+          "chapter_end": {
+            "type": "integer",
+            "description": "区间结束章号"
+          },
+          "summary": {
+            "type": "string",
+            "description": "压缩摘要"
+          }
+        }
+      }
+    },
+    "cast": {
+      "type": "array",
+      "description": "本章章纲出场角色里已建档的人（可选；一个都没有时省略）：人物档案里的人物速写（写了才有）与档案全文路径。速写每章必给，要更多就读档案全文；当前状态看 character_cards。下游影响：写手与审校据此知道出场的人是谁，审校不据速写判错",
+      "items": {
+        "type": "object",
+        "required": ["character", "character_uid", "profile_path"],
+        "additionalProperties": false,
+        "properties": {
+          "character": { "type": "string", "description": "canonical 角色名" },
+          "character_uid": { "type": "string" },
+          "profile_path": { "type": "string", "description": "人物档案正文路径（bible/characters/<名字>.md）" },
+          "portrait": { "type": "string", "description": "人物速写原文（人物档案 json 的 portrait）" }
+        }
+      }
+    },
+    "character_cards": {
+      "type": "array",
+      "description": "本章出场角色的状态卡，由受控谓词 facts 机械折叠（每谓词取最新值）",
+      "items": {
+        "type": "object",
+        "required": ["character", "card"],
+        "properties": {
+          "character": {
+            "type": "string",
+            "description": "canonical 角色名"
+          },
+          "as_of_chapter": {
+            "type": "integer",
+            "description": "卡片数据截至章号"
+          },
+          "card": {
+            "type": "object",
+            "description": "谓词到当前值的映射（受控谓词 12 词表 + x- 扩展）"
+          }
+        }
+      }
+    },
+    "characters_without_cards": {
+      "type": "array",
+      "description": "本章出场但状态卡未随包给出的角色（可选；无缺口时省略）。出场名单必须完整——包是子 agent 的全部世界，缺卡不点名它就只能猜。需要其状态时按 character_uid 用 project_memory_object 补查（截至上一章）",
+      "items": {
+        "type": "object",
+        "required": ["character", "reason"],
+        "properties": {
+          "character": {
+            "type": "string",
+            "description": "canonical 角色名"
+          },
+          "character_uid": {
+            "type": "string",
+            "description": "project_memory_object 的 ids 入参；角色未解析出 uid 时省略"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["尚无状态记录", "状态卡超预算未随包给出"],
+            "description": "缺卡成因：折叠不出卡（新登场/未抽出事实） vs 卡存在但被区块预算裁掉"
+          }
+        }
+      }
+    },
+    "planned_state_changes": {
+      "type": "array",
+      "description": "本章计划状态变更（可选；planned_state_changes 计划账 status=planned 行的人读渲染，维度按词表 display_name 口径）。写手把这些变化在本章正文里演出来；当前状态仍以 character_cards 为准",
+      "items": {
+        "type": "string"
+      }
+    },
+    "character_relationships": {
+      "type": "array",
+      "description": "本章涉及角色两两之间的当前关系（从 facts predicate='relationship' 按截至章号折叠），供写手与审校核查关系一致性",
+      "items": {
+        "type": "object",
+        "required": ["character_a", "character_b", "current_state"],
+        "properties": {
+          "character_a": {
+            "type": "string",
+            "description": "角色 A 名（字典序较小者）"
+          },
+          "character_b": {
+            "type": "string",
+            "description": "角色 B 名（字典序较大者）"
+          },
+          "current_state": {
+            "type": "string",
+            "description": "当前关系状态一句话，如「表面盟友，互相提防」"
+          },
+          "from_chapter": {
+            "type": "integer",
+            "description": "该关系状态生效的章号"
+          }
+        }
+      }
+    },
+    "derived_relationships": {
+      "type": "array",
+      "description": "读时 2 跳共邻推出的派生关联（仅本章无直接关系边的角色对）：事实串联短句、含「推断」标记，称谓与语义判断交写手；优先级低于直接关系与章纲，冲突时让位",
+      "items": { "type": "string" }
+    },
+    "foreshadowing_due": {
+      "type": "object",
+      "required": ["due", "others_count"],
+      "description": "伏笔临期清单：类型 major 的全部、兑现章不超过本章 +10 的、medium 本卷内的，其余（small、方案自定类型或没写类型）本段内的；其余活跃伏笔只给 others_count",
+      "properties": {
+        "due": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "description"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "伏笔 id"
+              },
+              "type": {
+                "type": "string",
+                "description": "伏笔类型（选填自由文字；官方方法用 small / medium / major）"
+              },
+              "description": {
+                "type": "string",
+                "description": "伏笔内容描述"
+              },
+              "planted_chapter": {
+                "type": "integer",
+                "description": "埋设章号"
+              },
+              "target_reveal": {
+                "type": "string",
+                "description": "计划兑现锚点：章号（如 \"120\"）或卷级粗锚点（如 \"vol-08\"）"
+              }
+            }
+          }
+        },
+        "others_count": {
+          "type": "integer",
+          "description": "未列入 due 的其余活跃伏笔条数"
+        }
+      }
+    },
+    "storyline_focus": {
+      "type": "array",
+      "description": "本章聚焦的故事线（来自章纲提交时写入的 chapter_storyline_focus）；某线连续 ≥5 章无 focus 的缺席预警写入 warnings",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "故事线 id"
+          },
+          "name": {
+            "type": "string",
+            "description": "故事线名称"
+          },
+          "type": {
+            "type": "string",
+            "description": "故事线类型（选填自由文字，没写就不带；官方方法用 main / growth / romance / faction / mystery / rivalry / world / other）"
+          }
+        }
+      }
+    },
+    "semantic_context": {
+      "type": "array",
+      "maxItems": 5,
+      "description": "多查询 hybrid 检索（FTS+向量、RRF 合并、章节距离衰减）返回的 top5 相关记忆片段",
+      "items": {
+        "type": "object",
+        "required": ["content"],
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "记忆片段内容"
+          },
+          "source_chapter": {
+            "type": "integer",
+            "description": "来源章节号"
+          },
+          "score": {
+            "type": "number",
+            "description": "检索得分"
+          }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "连贯性/数据缺口预警（与前文矛盾的风险点、storyline 缺席预警、世界规则/brief/角色卡缺失等写手须留意的项）。chapter-writer 必须逐条回应。预算截断/渲染降级的系统诊断不在此数组、仅经工具返回值回主会话"
+    },
+    "outline_extensions": {
+      "type": "object",
+      "description": "本章所在的段（arc）、卷梗概与书级大纲里方案自定的扩展字段（x- 开头，ADR-0089 §5），原样带给写手；章纲自己的扩展字段在 chapter_outline 里。都没有时不出现；整包超预算时最先去掉",
+      "properties": {
+        "book": { "type": "object", "additionalProperties": { "anyOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }] } },
+        "volume": { "type": "object", "additionalProperties": { "anyOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }] } },
+        "arc": { "type": "object", "additionalProperties": { "anyOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }] } }
+      }
+    },
+    "premise_extensions": {
+      "type": "object",
+      "description": "立项卡上方案或 Skill 自定的扩展字段（x- 开头，ADR-0089 §5，如开书时定的题材卡），原样带给写手；没有时不出现；作品级、量小，超预算时不去掉",
+      "additionalProperties": { "anyOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }] }
+    }
+  }
+}

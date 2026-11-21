@@ -1,0 +1,63 @@
+- insert:
+    - id: novel-workbench
+      name: 'narracat-dsh-workbench'
+      config: {}
+    - id: preset-novel
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: novel
+        name: Narracat · 叙述猫
+        description: 按 Narracat 方法从开书走到完本的长篇小说写作 Agent：看下一步、追踪记忆、立项、大纲、写章提交、审校改写、完本导出。
+        order: 20
+        plugins:
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: |
+                你是一位长篇小说写作 Agent，在「Narracat · 叙述猫」里工作。
+                作品是一个 .narracat 目录：正文、章纲、人物、设定、立项卡都是文件。作者在工作台的视图里读写它们，你用工具查与读；写章时按上下文包给的路径把稿子交给作者。
+
+                先取材料，再动笔或回答：写作现状、正文、人物与设定、大纲、写作上下文包都有工具。查不到就如实说查不到，不靠印象补一本书里的事实，也不用推测把留白填满。
+
+                写章时先取写作现状与本章上下文包，按方法写完，把稿子交给 project_chapter_submit（检查 → 记忆 → 发布）；审校结论用 novel_submit_review 提交。正式正文只由提交程序替换，不要直接改正文；工具没有返回 saved 时不要声称保存、发布或记住。
+
+                对作者只用作者词汇：不出现字段名、文件名、工具名、英文枚举与工程黑话；信息全保留，黑话全翻译。
+
+                你是作者的写作搭档兼编辑：作者做创作决定，你负责取材料、推进流程、做机械检查。每轮只推进一件事；作者问「接下来做什么」时先看 novel_journey，不要凭空安排。新书先立项再动笔，一次只问一个最关键的问题，能推断的不问。
+
+                写章前先看记忆简报（进度、最近十章摘要、人物当前状态、未收伏笔、作者备忘），不要凭印象补前情。作者的决定用 novel_tracking_note 记；追踪表由程序刷新，不要手改。
+          - id: agent-instructions
+            name: '@deepseek-ai/dsh-agent-instructions'
+            config:
+              maxBytes: 65536
+          - id: time-context
+            name: '@deepseek-ai/dsh-time-context'
+          - id: novel-workbench-agent
+            name: 'narracat-dsh-workbench/agent'
+          - id: tool-fs
+            name: '@deepseek-ai/dsh-tool-fs'
+            config:
+              applyPatch: false
+          - id: tool-fs-search
+            name: '@deepseek-ai/dsh-tool-fs-search'
+            config:
+              sampleOverCapGlobResults: false
+          - id: tool-skill
+            name: '@deepseek-ai/dsh-tool-skill'
+          - id: tool-ask-user
+            name: '@deepseek-ai/dsh-tool-ask-user'
+          - id: tool-subagent-control
+            name: '@deepseek-ai/dsh-tool-subagent-control'
+            config:
+              interrupt: false
+          - id: tool-subagent
+            name: '@deepseek-ai/dsh-tool-subagent'
+            config:
+              provider: spawn
+              toolName: subagent
+              modelSelection: true
+              modelDiscovery: true
+          - id: tool-todo
+            name: '@deepseek-ai/dsh-tool-todo'
+            config:
+              allowParallelInProgress: true

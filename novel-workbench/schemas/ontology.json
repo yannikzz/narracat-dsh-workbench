@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BookOntology",
+  "version": "1.0.0",
+  "description": "本书本体（ADR-0095）：`.narracat/ontology/v1/ontology.json`；作品没有它时读宿主交来的起步模板（作品场景登记的缺省，写作方案可声明覆盖，ADR-0079 §6）。身份规则照 Wikidata（不透明 ID、永不复用、合并留重定向），字段名照 LinkML / SKOS。约束按 Wikidata 语义：违规上报，不拦截。由写作记忆服务唯一读写。",
+  "type": "object",
+  "required": ["schema_version", "types", "dimensions", "relations", "redirects"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": 1 },
+    "note": { "type": "string", "maxLength": 1000 },
+    "types": { "type": "array", "minItems": 1, "maxItems": 64, "items": { "$ref": "#/$defs/type" } },
+    "dimensions": { "type": "array", "maxItems": 256, "items": { "$ref": "#/$defs/dimension" } },
+    "relations": { "type": "array", "maxItems": 128, "items": { "$ref": "#/$defs/relation" } },
+    "redirects": {
+      "type": "array",
+      "maxItems": 512,
+      "description": "合并留下的重定向（Wikidata redirect）：旧 ID 永久指向新 ID，事实读时先顺重定向解析。",
+      "items": {
+        "type": "object",
+        "required": ["id", "redirect_to", "at"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "redirect_to": { "$ref": "#/$defs/id" },
+          "at": { "type": "string", "maxLength": 40 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "exact_mappings": {
+      "type": "array", "maxItems": 8, "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^predicate:(identity|location|possession|goal|injury|ability|status|secret|reputation|oath|debt|relationship|x-[\\u4e00-\\u9fffa-z][\\u4e00-\\u9fffa-z0-9_]*)$" },
+      "description": "对应的旧抽取谓词（LinkML exact_mappings / SKOS exactMatch），只供老事实确定性归类用：同谓词下梯子维度按取值认领，其次自由维度，其次关系。"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^(type|dim|rel):[a-z0-9_]{2,32}$",
+      "description": "不透明编号，永不复用；模板项写死（type:person、dim:location…），新提议的项由服务生成。"
+    },
+    "label": { "type": "string", "minLength": 1, "maxLength": 20, "pattern": "^[^\\r\\n]+$" },
+    "base": {
+      "type": "object",
+      "required": ["id", "label", "aliases", "source"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "$ref": "#/$defs/label", "description": "首选名（SKOS prefLabel），可改" },
+        "aliases": { "type": "array", "maxItems": 16, "items": { "$ref": "#/$defs/label" }, "description": "别名（SKOS altLabel）" },
+        "description": { "type": "string", "maxLength": 300 },
+        "source": { "enum": ["template", "author", "migrated"], "description": "来自起步模板 / 作者确认 / 老书迁移（已确认的状态词表）" },
+        "deprecated": { "const": true },
+        "replaced_by": { "$ref": "#/$defs/id", "description": "LinkML deprecated_element_has_exact_replacement" }
+      }
+    },
+    "type": {
+      "allOf": [{ "$ref": "#/$defs/base" }],
+      "properties": {
+        "id": true, "label": true, "aliases": true, "description": true, "source": true, "deprecated": true, "replaced_by": true,
+        "fixed": { "const": true, "description": "场景固定、不可删（小说的人物）" }
+      },
+      "additionalProperties": false
+    },
+    "dimension": {
+      "allOf": [{ "$ref": "#/$defs/base" }],
+      "required": ["type", "multivalued", "value"],
+      "properties": {
+        "id": true, "label": true, "aliases": true, "description": true, "source": true, "deprecated": true, "replaced_by": true, "exact_mappings": { "$ref": "#/$defs/exact_mappings" },
+        "type": { "$ref": "#/$defs/id", "description": "挂在哪个实体类型下（type: 编号）" },
+        "multivalued": { "type": "boolean", "description": "LinkML multivalued；false＝单值（Wikidata single-value constraint，通用单值矛盾检查据此上报）" },
+        "value": {
+          "oneOf": [
+            { "type": "object", "required": ["kind"], "additionalProperties": false, "properties": { "kind": { "const": "free" } } },
+            {
+              "type": "object", "required": ["kind", "values"], "additionalProperties": false,
+              "properties": { "kind": { "const": "ladder" }, "values": { "type": "array", "minItems": 2, "maxItems": 60, "items": { "$ref": "#/$defs/label" }, "description": "有序梯子，按递进序" } }
+            },
+            {
+              "type": "object", "required": ["kind"], "additionalProperties": false,
+              "properties": { "kind": { "const": "number" }, "unit": { "type": "string", "maxLength": 8 }, "min": { "type": "number" }, "max": { "type": "number" } }
+            }
+          ]
+        },
+        "marker": { "enum": ["location", "identity", "life_status", "secret"], "description": "语义标记闭集（ADR-0095 §6.4）：只给有代码规则的含义" },
+        "terminal_values": {
+          "type": "array", "maxItems": 30, "items": { "$ref": "#/$defs/label" },
+          "description": "终态取值：值等于或包含其中任一词即为终态（如「死亡」），此后该实体不该再有新状态"
+        }
+      },
+      "additionalProperties": false
+    },
+    "relation": {
+      "allOf": [{ "$ref": "#/$defs/base" }],
+      "required": ["symmetric"],
+      "properties": {
+        "id": true, "label": true, "aliases": true, "description": true, "source": true, "deprecated": true, "replaced_by": true, "exact_mappings": { "$ref": "#/$defs/exact_mappings" },
+        "symmetric": { "type": "boolean", "description": "OWL SymmetricProperty；false＝有向" },
+        "multivalued": { "type": "boolean", "description": "只记起点一头：false＝一个起点同一时刻只连一个终点（所在、下落），换终点用「变为」；缺省＝多值。对称关系两端同一个设定" },
+        "marker": { "enum": ["location", "identity", "life_status", "secret"], "description": "语义标记闭集（ADR-0095 §6.4、§7.3）：挂在关系种类上时与维度同一套规则，全本体每种标记只在一处" },
+        "inverse": { "$ref": "#/$defs/id", "description": "owl:inverseOf（师父 ↔ 徒弟）" },
+        "domain": { "type": "array", "maxItems": 16, "items": { "$ref": "#/$defs/id" }, "description": "起点可以是哪些实体类型（RDFS domain）" },
+        "range": { "type": "array", "maxItems": 16, "items": { "$ref": "#/$defs/id" }, "description": "终点可以是哪些实体类型（RDFS range）" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

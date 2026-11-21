@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "note": "官方小说方案的通用起步本体（ADR-0095 §6.5）：作品没有本书本体文件时直接读它，作者确认提议后才写本书本体。ID 写死、永不复用——老书迁移按它们把 12 个旧谓词对上维度与关系（§12）；停用并由关系替代的维度，老书的记录按「主语 → 值」搬成那个关系（ADR-0095 §7.3 §12）。题材差异不在这里，交给官方 Skill「本书本体构建」。",
+  "types": [
+    {"id": "type:person", "label": "人物", "aliases": ["角色"], "fixed": true, "source": "template"},
+    {"id": "type:place", "label": "地点", "aliases": ["场所"], "source": "template"},
+    {"id": "type:faction", "label": "势力", "aliases": ["组织", "门派"], "source": "template"},
+    {"id": "type:item", "label": "物件", "aliases": ["物品", "道具"], "source": "template"},
+    {"id": "type:concept", "label": "概念", "aliases": [], "source": "template"},
+    {"id": "type:other", "label": "其他", "aliases": [], "source": "template"}
+  ],
+  "dimensions": [
+    {"id": "dim:identity", "label": "身份", "aliases": [], "description": "人物是谁：对外的身份、职业、名分；换了身份才变（门派归属记「所属」）", "type": "type:person", "multivalued": false, "value": {"kind": "free"}, "marker": "identity", "source": "template", "exact_mappings": ["predicate:identity"]},
+    {"id": "dim:location", "label": "所在", "aliases": [], "description": "已改为关系「所在」", "type": "type:person", "multivalued": false, "value": {"kind": "free"}, "source": "template", "deprecated": true, "replaced_by": "rel:location"},
+    {"id": "dim:status", "label": "生死状况", "aliases": ["生死"], "description": "存活、下落不明、死亡这类生死层面；伤病另记", "type": "type:person", "multivalued": false, "value": {"kind": "free"}, "marker": "life_status", "terminal_values": ["死亡", "已死", "身死", "战死", "陨落", "殒命", "丧命", "身亡", "去世", "毙命", "牺牲", "遇害", "被击毙"], "source": "template", "exact_mappings": ["predicate:status"]},
+    {"id": "dim:secret", "label": "秘密", "aliases": [], "description": "人物隐瞒着、或别人还不知道的事", "type": "type:person", "multivalued": true, "value": {"kind": "free"}, "marker": "secret", "source": "template", "exact_mappings": ["predicate:secret"]},
+    {"id": "dim:possession", "label": "持有物", "aliases": [], "description": "已停用：东西在谁手里改记物件的「下落」，以前记下的持有物留作历史", "type": "type:person", "multivalued": true, "value": {"kind": "free"}, "source": "template", "deprecated": true, "exact_mappings": ["predicate:possession"]},
+    {"id": "dim:goal", "label": "目标", "aliases": [], "description": "人物眼下想达成、正在追求的事", "type": "type:person", "multivalued": true, "value": {"kind": "free"}, "source": "template", "exact_mappings": ["predicate:goal"]},
+    {"id": "dim:injury", "label": "伤势", "aliases": [], "description": "身上的伤与病", "type": "type:person", "multivalued": true, "value": {"kind": "free"}, "source": "template", "exact_mappings": ["predicate:injury"]},
+    {"id": "dim:ability", "label": "能力", "aliases": [], "description": "会什么：技能、本事、特长", "type": "type:person", "multivalued": true, "value": {"kind": "free"}, "source": "template", "exact_mappings": ["predicate:ability"]},
+    {"id": "dim:reputation", "label": "声望", "aliases": [], "description": "别人怎么看他：名声、口碑", "type": "type:person", "multivalued": false, "value": {"kind": "free"}, "source": "template", "exact_mappings": ["predicate:reputation"]},
+    {"id": "dim:oath", "label": "誓约", "aliases": [], "description": "许下的承诺、立下的誓", "type": "type:person", "multivalued": true, "value": {"kind": "free"}, "source": "template", "exact_mappings": ["predicate:oath"]},
+    {"id": "dim:debt", "label": "债务", "aliases": [], "description": "欠下的人情与钱财，对势力或已故者的旧账；对某个在世人物的恩仇记关系", "type": "type:person", "multivalued": true, "value": {"kind": "free"}, "source": "template", "exact_mappings": ["predicate:debt"]}
+  ],
+  "relations": [
+    {"id": "rel:relationship", "label": "关系", "aliases": [], "description": "两者之间当下是什么关系，如「互相提防的盟友」", "symmetric": true, "source": "template", "exact_mappings": ["predicate:relationship"]},
+    {"id": "rel:location", "label": "所在", "aliases": ["位置"], "description": "人物此刻在哪：终点写地名，换了地方才变", "symmetric": false, "multivalued": false, "marker": "location", "domain": ["type:person"], "range": ["type:place"], "source": "template", "exact_mappings": ["predicate:location"]},
+    {"id": "rel:whereabouts", "label": "下落", "aliases": [], "description": "后文还会用到的物件此刻在谁手里或在哪里", "symmetric": false, "multivalued": false, "domain": ["type:item"], "range": ["type:person", "type:place"], "source": "template"},
+    {"id": "rel:affiliation", "label": "所属", "aliases": [], "description": "人物属于哪些门派、势力、组织", "symmetric": false, "domain": ["type:person"], "range": ["type:faction"], "source": "template"}
+  ],
+  "redirects": []
+}

@@ -1,0 +1,96 @@
+name: Bug report
+description: Something in the workbench, writing flow, install or package is broken.
+title: "[Bug] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please use the fictional sample book for reproductions; do not attach a real manuscript or any secrets.
+
+        Before filing, run `npm test` if you are working from source, and check the existing issues.
+
+  - type: input
+    id: version
+    attributes:
+      label: Plugin version
+      description: Output of `npm view narracat-dsh-workbench version` or the installed package version.
+      placeholder: "1.0.9"
+    validations:
+      required: true
+
+  - type: input
+    id: dsh-version
+    attributes:
+      label: DSH version
+      description: The DSH version shown in About/settings or `dsh --version`.
+      placeholder: "0.2.2-rc.5"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install
+    attributes:
+      label: Install method
+      options:
+        - GUI (Plugins → Add plugin)
+        - CLI (`dsh plugin --profile ... add`)
+        - Agent (`plugin_manager install_bundle`)
+        - Local tarball
+        - Source checkout
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: OS / runtime
+      placeholder: "macOS 15, DSH Desktop; or Ubuntu 24.04, dsh CLI"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps, with the book type (new book / sample book / real book) and the selected view.
+      placeholder: |
+        1. Open the sample book
+        2. Select chapter 4
+        3. Click 写本章
+        4. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior / error
+      description: Include the exact error text and the relevant log lines. Redact paths, tokens and manuscript content.
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots / additional context
+      description: Screenshots of the UI state are welcome. Use the sample book.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Checklist
+      options:
+        - label: I am not attaching a real manuscript, API key, token or private path.
+          required: true
+        - label: I searched existing issues and discussions.
+          required: true

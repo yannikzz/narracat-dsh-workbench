@@ -1,0 +1,34 @@
+{
+  "chapter": 1,
+  "title": "雨港来信",
+  "positioning": "推进",
+  "value_shift": "",
+  "beats": [
+    "傍晚雨停后，林照在渡口石阶缝里拾起一封写着自己名字的信。",
+    "信中只有明早到旧渡口等候的约定，没有署名；林照观察折痕和雨痕，迟疑是否赴约。",
+    "他把信收进衣襟，决定明早再来；本章停在渡船离岸的笛声中。"
+  ],
+  "storyline_focus": [],
+  "characters": [
+    {
+      "character_uid": "c64c31c5-2ed5-4f30-a953-931ecdf20001",
+      "name": "林照"
+    }
+  ],
+  "pov_character": {
+    "character_uid": "c64c31c5-2ed5-4f30-a953-931ecdf20001",
+    "name": "林照"
+  },
+  "state_changes": [
+    {
+      "character": {
+        "character_uid": "c64c31c5-2ed5-4f30-a953-931ecdf20001",
+        "name": "林照"
+      },
+      "dimension": "inventory",
+      "value": "信笺",
+      "operation": "add",
+      "reason": "从石阶缝中拾得一封给自己的信"
+    }
+  ]
+}

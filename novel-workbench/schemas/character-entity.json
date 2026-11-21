@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CharacterEntity",
+  "version": "1.0.0",
+  "description": "角色结构化实体：人物身份 json（.narracat/data/bible/characters/<name>.json）的形状，是人物身份的唯一出处——编号、名字、别名、性别、年龄、人物速写、完善度与初始状态都只在这里，档案 md 只有作者正文。novel_submit_character_entity（宿主设定提交程序直调）用于首次建档、候选转正与整份更新；已有人物的名字、年龄、性别、别名须保持原值，修改走宿主身份版本服务（作者在人物页、Agent 受托改字段）。initial_states 在同一次保存里记成 source=authored 的 facts（默认章 0，中途转正传出场章）；逐章演变真相在 facts。",
+  "type": "object",
+  "required": [
+    "name"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "character_uid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "canonical 身份（lowercase UUID v4）。省略由工具铸造；候选转正传既有 UID 复用同一身份"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 30,
+      "pattern": "^[^./\\\\][^/\\\\]*$",
+      "description": "canonical 显示名（身份 json 与档案 md 的文件名都取它，改名时两个文件一起换名）。禁含路径分隔符 / 或 \\，禁以 . 开头，防写入口逃逸出 bible/characters/ 目录"
+    },
+    "aliases": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 20
+      },
+      "description": "别名/称号/马甲；按编号认人时正式名之外也认这些名字"
+    },
+    "gender": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "性别（自由短文本，跨题材不设枚举）"
+    },
+    "age": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "初始年龄描述（如「18 岁」「看似二十许」）。系统不自动演变"
+    },
+    "portrait": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "description": "人物速写（选填）：给写手的一小段，说这个人是谁。写手每章拿到本章出场人物的这一段，要更多再读档案全文；作者在人物页看到、改的就是这一份。下游影响：写手包 cast、审校对照（不据此判错）"
+    },
+    "profile_stage": {
+      "type": "string",
+      "enum": [
+        "stub",
+        "sketch",
+        "full"
+      ],
+      "description": "完善度（选填）：官方设定方法的档位，stub 只有简档、sketch 有轮廓、full 完整；更新时不给沿用原档。下游影响：人物页标签、设定提交的降档提醒"
+    },
+    "effective_chapter": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "初始状态生效章：建书期角色=0（省略默认）；中途转正角色=首次出场章"
+    },
+    "initial_states": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "required": [
+          "dimension",
+          "value"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "dimension": {
+            "type": "string",
+            "description": "状态词表里的维度 key；值必须能通过该维度校验（enum 维度值 ∈ values）"
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "一句话缘由（可选，进 fact 不单独存）"
+          }
+        }
+      },
+      "description": "初始状态列表；many 维度可多条同 dimension（如两件持有物）"
+    }
+  }
+}

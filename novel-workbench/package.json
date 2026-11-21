@@ -1,0 +1,76 @@
+{
+  "name": "narracat-dsh-workbench",
+  "version": "1.0.9",
+  "displayName": "Narracat · 叙述猫",
+  "type": "module",
+  "description": "Narracat · 叙述猫 — a full-flow novel workbench for DeepSeek Harness: create a book, follow one next step from premise to export, and write through a checked submission pipeline.",
+  "license": "MIT",
+  "author": "Narracat contributors",
+  "homepage": "https://narracat.com/dsh",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yannikzz/narracat-dsh-workbench.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yannikzz/narracat-dsh-workbench/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "bundle",
+    "novel",
+    "writing",
+    "narracat"
+  ],
+  "engines": {
+    "node": ">=20",
+    "dsh": ">=0.2.2-rc.5 <0.3.0"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./agent": "./agent.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "agent.js",
+    "client.js",
+    "lib",
+    "skills",
+    "agents",
+    "schemas",
+    "templates",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "docs",
+    "icon.svg",
+    "README.md",
+    "LICENSE",
+    "NOTICE",
+    "CHANGELOG.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-api-session-controller",
+        "@deepseek-ai/dsh-client-ui-session"
+      ]
+    }
+  }
+}

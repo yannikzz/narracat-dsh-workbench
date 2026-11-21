@@ -1,0 +1,27 @@
+{
+  "chapter": 3,
+  "title": "鱼丸摊",
+  "positioning": "推进",
+  "value_shift": "",
+  "beats": [
+    "傍晚林照在街口鱼丸摊向阿青打听旧渡口。",
+    "阿青说昨天傍晚看见一个穿灰雨衣的女人往旧渡口去；她认出木牌是旧船票。",
+    "林照没有提信；雨又下起来，他把信、木牌、雨衣女人三件事摆在一起，暂时连不上。"
+  ],
+  "storyline_focus": [],
+  "characters": [
+    {
+      "character_uid": "c64c31c5-2ed5-4f30-a953-931ecdf20001",
+      "name": "林照"
+    },
+    {
+      "character_uid": "c64c31c5-2ed5-4f30-a953-931ecdf20002",
+      "name": "阿青"
+    }
+  ],
+  "pov_character": {
+    "character_uid": "c64c31c5-2ed5-4f30-a953-931ecdf20001",
+    "name": "林照"
+  },
+  "state_changes": []
+}

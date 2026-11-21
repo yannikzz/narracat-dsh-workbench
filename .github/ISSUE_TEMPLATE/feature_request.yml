@@ -1,0 +1,62 @@
+name: Feature request
+description: Suggest a workflow, UI or compatibility improvement.
+title: "[Feature] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Narracat optimizes for a full-length novel with one next step. Please describe the author's problem, not only the widget you want.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / author scenario
+      description: What are you trying to do, and where does the current workbench get in the way?
+      placeholder: "When I rewrite chapter 3 while chapter 6 is being written, ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: What should happen? If it changes a flow, say which step owns the action.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Shelf / new book
+        - Overview / next step
+        - Chapter reading / editing
+        - Writing wait / background session
+        - Outline / characters / world
+        - Memory / tracking
+        - Review / rewrite / submission
+        - Export
+        - Right sidebar panel
+        - Install / packaging / DSH compatibility
+        - Docs
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Checklist
+      options:
+        - label: This is not a request to add a second write/next-step CTA on the same screen.
+          required: false
+        - label: I checked the existing discussions and issues.
+          required: true

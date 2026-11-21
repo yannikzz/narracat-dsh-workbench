@@ -1,0 +1,80 @@
+{
+  "cards": [
+    {
+      "card": "genre_contract",
+      "fields": [
+        {
+          "key": "subgenre",
+          "value": "日常悬疑",
+          "certainty": "canon"
+        },
+        {
+          "key": "emotional_tone",
+          "value": "克制、潮湿、缓慢",
+          "certainty": "canon"
+        }
+      ]
+    },
+    {
+      "card": "core_hook",
+      "fields": [
+        {
+          "key": "hook",
+          "value": "雨港的搬工林照收到一封没有署名的信，约他到废弃的旧渡口等，他一步步接近写信的人。",
+          "certainty": "canon"
+        }
+      ]
+    },
+    {
+      "card": "central_dramatic_question",
+      "fields": [
+        {
+          "key": "question",
+          "value": "写信的人是谁，为什么是林照？",
+          "certainty": "canon"
+        }
+      ]
+    },
+    {
+      "card": "world_rules",
+      "fields": [
+        {
+          "key": "夜禁",
+          "value": "入夜后渡船不许靠泊雨港",
+          "note": "想夜里离港的人只能去找私船，和守港的人对上",
+          "certainty": "canon"
+        }
+      ]
+    },
+    {
+      "card": "narrator_voice",
+      "fields": [
+        {
+          "key": "archetype",
+          "value": "冷静的旁观者",
+          "certainty": "canon"
+        },
+        {
+          "key": "tone",
+          "value": "克制，多用留白",
+          "certainty": "canon"
+        },
+        {
+          "key": "pacing",
+          "value": "慢",
+          "certainty": "canon"
+        },
+        {
+          "key": "address",
+          "value": "third_limited",
+          "certainty": "canon"
+        },
+        {
+          "key": "style_keywords",
+          "value": "克制、留白、物件说话",
+          "certainty": "canon"
+        }
+      ]
+    }
+  ]
+}

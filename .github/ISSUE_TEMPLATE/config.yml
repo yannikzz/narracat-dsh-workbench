@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Usage guide
+    url: https://github.com/yannikzz/narracat-dsh-workbench/blob/main/novel-workbench/docs/GUIDE.md
+    about: How to install and use the workbench.
+  - name: DeepSeek Harness discussions
+    url: https://github.com/deepseek-ai/deepseek-harness/discussions
+    about: For DSH runtime or general Harness questions.

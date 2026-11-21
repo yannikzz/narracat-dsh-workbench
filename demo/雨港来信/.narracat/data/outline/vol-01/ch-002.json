@@ -1,0 +1,37 @@
+{
+  "chapter": 2,
+  "title": "旧渡口",
+  "value_shift": "将信将疑 → 认定有人在等他",
+  "emotional_stakes": "白跑一趟，丢掉一天的工钱",
+  "dramatic_focus": "空无一人的旧渡口里，只有一块写着「等」字的木牌",
+  "storyline_focus": [
+    "letter-line"
+  ],
+  "pov_character": {
+    "character_uid": "c64c31c5-2ed5-4f30-a953-931ecdf20001",
+    "name": "林照"
+  },
+  "ending_note": "他解下木牌带回，和信放在一起",
+  "scenes": [
+    {
+      "location": "去旧渡口的烂泥路",
+      "characters": [
+        {
+          "character_uid": "c64c31c5-2ed5-4f30-a953-931ecdf20001",
+          "name": "林照"
+        }
+      ],
+      "pressure_point": "路比记忆里远，他几次想回头"
+    },
+    {
+      "location": "旧渡口栈桥断口",
+      "characters": [
+        {
+          "character_uid": "c64c31c5-2ed5-4f30-a953-931ecdf20001",
+          "name": "林照"
+        }
+      ],
+      "pressure_point": "木桩上系着刻〇七的号牌，背面一个「等」字"
+    }
+  ]
+}

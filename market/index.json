@@ -1,0 +1,38 @@
+{
+  "format": 1,
+  "title": {
+    "zh": "Narracat 插件",
+    "en": "Narracat plugins"
+  },
+  "plugins": [
+    {
+      "name": "narracat-dsh-workbench",
+      "title": {
+        "zh": "Narracat · 叙述猫",
+        "en": "Narracat"
+      },
+      "description": {
+        "zh": "在 DSH 里从开书走到完本的长篇小说工作台：书架、章节编辑、章纲/人物/记忆视图，以及 Word / HTML / Markdown / TXT 导出。",
+        "en": "A full-flow novel workbench for DeepSeek Harness: shelf, manuscript editor, outline/character/memory views, and Word/HTML/Markdown/TXT export."
+      },
+      "icon": "icons/narracat.svg",
+      "author": "Yannik",
+      "homepage": "https://narracat.com",
+      "versions": [
+        {
+          "version": "1.0.9",
+          "publishTimestamp": 1795248739,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.2-rc.5 <0.3.0"
+          }
+        }
+      ],
+      "dist-tags": {
+        "latest": "1.0.9"
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "formatVersion": 15,
+  "history": [
+    {
+      "from": 0,
+      "to": 15,
+      "at": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "unseenChanges": [
+    {
+      "kind": "data-files-hidden"
+    },
+    {
+      "kind": "scattered-files",
+      "count": 1
+    },
+    {
+      "kind": "guide-cleaned",
+      "kept": true
+    }
+  ]
+}

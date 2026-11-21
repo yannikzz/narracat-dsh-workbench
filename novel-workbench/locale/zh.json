@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "Narracat · 叙述猫",
+    "description": "在 DSH 里从零写一部长篇小说：左侧栏点「Narracat · 叙述猫」打开书架，新建作品后按概览里唯一的下一步完成立项、大纲、写章与导出。作品就是工作区里的 .narracat 文件夹，工作台只在这个目录内读写，不复制、不上传。写章走「检查 → 记记忆 → 发布」的提交程序，Agent 不能直接改正式正文；正文改过后的旧记忆会标为过期，不会静默沿用。支持导出 Word、可打印 HTML、Markdown 与 TXT。需要 Narracat 作品目录（.narracat/config.yaml），也可以在空书架直接新建；本版本不做云同步与 PDF 导出。 书架右上角的「联系作者」里有作者简介、GitHub 开源版、小红书与公众号二维码。 顶栏的「桌面专业版」和「联系作者」弹窗里有 Mac/Windows 专业版下载与官网入口。",
+    "detail": "docs/DETAIL.zh.md"
+  }
+}

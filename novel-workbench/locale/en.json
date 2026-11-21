@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "Narracat · 叙述猫",
+    "description": "A full-flow novel workbench inside DeepSeek Harness. Open it from the “Narracat · 叙述猫” entry in the left sidebar; create a book and follow the single next step shown on its overview through premise, outline, chapter writing and export. Books stay as ordinary .narracat folders in your workspace; the workbench only reads and writes inside that folder. Writing goes through the checked submit pipeline (machine checks, chapter memory, publish), so the agent cannot edit published prose directly, and stale memory is marked instead of silently reused. Export to Word, printable HTML, Markdown or TXT. Requires a Narracat book directory (.narracat/config.yaml) or create one from the empty shelf; no cloud sync and no PDF export. Use “Contact author” at the top right of the shelf for the author bio, the open-source GitHub link, and the Xiaohongshu / WeChat QR codes. The “Desktop Pro” entry and the contact popup link to the Mac/Windows Pro downloads and the official site.",
+    "detail": "docs/DETAIL.md"
+  }
+}

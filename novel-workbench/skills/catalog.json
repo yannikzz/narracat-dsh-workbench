@@ -1,0 +1,140 @@
+{
+  "origin": {
+    "project": "narracat-pro / agent-core/narracat",
+    "agentCoreVersion": "4.0.434",
+    "copiedAt": "2026-11-19",
+    "note": "16 个 Skill 全部搬入并启用；注册时把 ${CLAUDE_PLUGIN_ROOT} 换成插件真实目录、去掉 mcp__narracat_memory__ 前缀，未接工具与岗位派发改成 DSH 版本（见 agent.js 的 UNPORTED / SKILL_PATCHES / 各 Skill 末尾的适配一节）。"
+  },
+  "registeredCount": 16,
+  "totalCount": 16,
+  "skills": [
+    {
+      "name": "novel-book-ontology",
+      "title": "本书设定框架",
+      "summary": "定下这本书要记的人物状态、关系与事物类型",
+      "kind": "registered",
+      "registered": true,
+      "files": 37
+    },
+    {
+      "name": "novel-deslop",
+      "title": "去 AI 味",
+      "summary": "给已写章节去 AI 味的手艺资料：表达、用笔、故事三层怎么查、哪些直接改、哪些先问作者",
+      "kind": "registered",
+      "registered": true,
+      "files": 6
+    },
+    {
+      "name": "novel-setting-craft",
+      "title": "设定手艺",
+      "summary": "建人物与世界设定的手艺资料：主角卡、配角卡、反派、动机、人物关系、速写与说话示范、金手指、势力与刻度",
+      "kind": "registered",
+      "registered": true,
+      "files": 7
+    },
+    {
+      "name": "novel-structure",
+      "title": "长篇叙事结构",
+      "summary": "排大纲的资料：各项填法、卷与段的排法、情绪弧线、读者契约、章纲方法、钩子与悬念编排",
+      "kind": "registered",
+      "registered": true,
+      "files": 8
+    },
+    {
+      "name": "novel-web-craft",
+      "title": "写章手艺",
+      "summary": "写一章的手艺资料：从章纲到正文、情绪落地、对话、开篇、题材卡、本章技法",
+      "kind": "registered",
+      "registered": true,
+      "files": 47
+    },
+    {
+      "name": "organize-entities",
+      "title": "整理名字",
+      "summary": "把旧章节里的名字分成人物、地点、势力等，由作者确认",
+      "kind": "registered",
+      "registered": true,
+      "files": 1
+    },
+    {
+      "name": "organize-ontology",
+      "title": "整理本体",
+      "summary": "把还没归类的记忆记录归进合适的类型，由作者确认",
+      "kind": "registered",
+      "registered": true,
+      "files": 1
+    },
+    {
+      "name": "plan",
+      "title": "大纲",
+      "summary": "分三层规划大纲：全书、分卷、分章",
+      "kind": "registered",
+      "registered": true,
+      "files": 1
+    },
+    {
+      "name": "review",
+      "title": "审修",
+      "summary": "检查已写章节里的错误，并给出修改建议",
+      "kind": "registered",
+      "registered": true,
+      "files": 1
+    },
+    {
+      "name": "revise-premise",
+      "title": "改立项卡",
+      "summary": "修改立项卡里的一条内容，先评估对全书的影响",
+      "kind": "registered",
+      "registered": true,
+      "files": 1
+    },
+    {
+      "name": "rewrite",
+      "title": "改写",
+      "summary": "局部修改或整章重写已写的章节",
+      "kind": "registered",
+      "registered": true,
+      "files": 1
+    },
+    {
+      "name": "setup",
+      "title": "立项",
+      "summary": "通过对话把点子打磨成九张立项卡",
+      "kind": "registered",
+      "registered": true,
+      "files": 1
+    },
+    {
+      "name": "status",
+      "title": "进度",
+      "summary": "查看章节完成度、字数与伏笔",
+      "kind": "registered",
+      "registered": true,
+      "files": 1
+    },
+    {
+      "name": "sync-chapter-memory",
+      "title": "核对记忆",
+      "summary": "正文改过之后，按正文重新核对相关章节的记忆",
+      "kind": "registered",
+      "registered": true,
+      "files": 1
+    },
+    {
+      "name": "world",
+      "title": "设定",
+      "summary": "创建、查看和修改世界观与人物设定",
+      "kind": "registered",
+      "registered": true,
+      "files": 1
+    },
+    {
+      "name": "write",
+      "title": "写章",
+      "summary": "按章纲写一章，写完自动审校并记进记忆",
+      "kind": "registered",
+      "registered": true,
+      "files": 1
+    }
+  ]
+}

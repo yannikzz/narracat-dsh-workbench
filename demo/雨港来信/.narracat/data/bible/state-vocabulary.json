@@ -1,0 +1,1 @@
+{"dimensions":[{"key":"location","predicate":"location","display_name":"位置","cardinality":"one","value_type":"free"},{"key":"inventory","predicate":"possession","display_name":"持有物","cardinality":"many","value_type":"free"}]}
