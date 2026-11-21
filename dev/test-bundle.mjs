@@ -39,7 +39,7 @@ for (const [index, line] of lines.entries()) {
 check('the preset prefix block is indented as YAML', bad.length === 0, bad)
 
 const pkg = JSON.parse(await readFile(new URL('../novel-workbench/package.json', import.meta.url), 'utf8'))
-check('bundle version is current', pkg.version === '1.0.9', pkg.version)
+check('bundle version is current', pkg.version === '1.0.10', pkg.version)
 check('bundle is publishable', pkg.name === 'narracat-dsh-workbench' && pkg.private !== true && pkg.license === 'MIT', { name: pkg.name, private: pkg.private, license: pkg.license })
 check('bundle declares DSH compatibility', typeof pkg.engines?.dsh === 'string' && pkg.engines.dsh.length > 0, pkg.engines)
 check('bundle exports host, agent and client', pkg.exports?.['.'] === './index.js' && pkg.exports?.['./agent'] === './agent.js' && pkg.exports?.['./client'] === './client.js', pkg.exports)

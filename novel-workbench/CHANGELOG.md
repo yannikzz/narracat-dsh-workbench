@@ -2,6 +2,14 @@
 
 All notable changes to Narracat · 叙述猫 (`narracat-dsh-workbench`).
 
+## 1.0.10 — 2026-11-22
+
+- 插件关联网站统一为 **https://narracat.com/dsh**：`package.json` 的 `homepage`、市场索引的 `homepage`、bundle README 与仓库 README 的插件入口都指向插件页；npm 页面和 DSH 索引不再落到产品站根路径。
+- 补全 GitHub 开源仓库元数据：`repository` 与 `bugs` 指向 `github.com/yannikzz/narracat-dsh-workbench`；仓库内加入 README、LICENSE、CONTRIBUTING、SECURITY、CODE_OF_CONDUCT、架构与发布文档、CI 和 Issue/PR 模板。
+- 修正使用指南「线性写作」章节为 1.0.9 的实际行为：一屏一个写章动作、写作等待现场、按书持久化并在切页后恢复、完成后自动加载成稿、右侧面板复用紧凑等待卡；删掉旧的「右上角下一步 / 其他写章按钮」描述。
+- 文档、元数据与分发信息补丁；写作流程行为没有变化。
+- 回归：396 项，0 失败（macOS；CI 在 Linux 的 Node 20/22 也通过）。
+
 ## 1.0.9 — 2026-11-21
 
 - 一个屏幕只留一个写章动作：去掉应用栏的「写下一章 / 写第 N 章」、目录底部的「下一步」、目录头的重复刷新；章节空态或写作等待态出现时，内容工具栏让出写章按钮；追踪空态不再复制刷新 CTA；右侧面板去掉底部重复的「打开完整工作台」和写作看板里重复的「看全部章节」。

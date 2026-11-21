@@ -1,6 +1,6 @@
 {
   "name": "narracat-dsh-workbench",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "displayName": "Narracat · 叙述猫",
   "type": "module",
   "description": "Narracat · 叙述猫 — a full-flow novel workbench for DeepSeek Harness: create a book, follow one next step from premise to export, and write through a checked submission pipeline.",

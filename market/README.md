@@ -5,7 +5,7 @@ DSH 的「发现」标签页读取一个静态索引 JSON。这里是一份单�
 ```
 market/
 ├── index.template.json # 索引模板（只有插件名、标题、图标等稳定字段）
-├── index.json          # 已生成（1.0.9）；发布后可托管
+├── index.json          # 已生成（最新发布版本）；发布后可托管
 ├── icons/narracat.svg  # 图标（相对索引 URL）
 └── update-index.mjs    # 从 template 生成 index.json，回填真实版本与发布时间
 ```
@@ -16,7 +16,7 @@ market/
 node market/update-index.mjs
 ```
 
-脚本读取 npm registry 的已发布版本清单、发布时间和 `dist-tags`，只保留声明了 `dsh.bundle` 且 `engines.dsh` 有效的版本；`0.0.0-stage` 占位版本和从未发布的模板版本不会进入索引。`index.json` 的 `dist-tags.latest` 来自 registry，目前为 `1.0.9`。**npm publish 成功后再托管 `index.json`**；模板里的版本与时间戳只是占位。
+脚本读取 npm registry 的已发布版本清单、发布时间和 `dist-tags`，只保留声明了 `dsh.bundle` 且 `engines.dsh` 有效的版本；`0.0.0-stage` 占位版本和从未发布的模板版本不会进入索引。`index.json` 的 `dist-tags.latest` 来自 registry，指向最新发布版本。**npm publish 成功后再托管 `index.json`**；模板里的版本与时间戳只是占位。
 
 ## 托管
 
