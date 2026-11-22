@@ -2,10 +2,11 @@
 
 Narracat · 叙述猫 is a DSH bundle that turns a Narracat `.narracat` book directory into a workbench page inside DeepSeek Harness. Package: `narracat-dsh-workbench` · Plugin page: https://narracat.com/dsh
 
-Production release 1.0.10, distilled from the user's Narracat Pro project: the book stays the source of truth on disk; DSH only adds a view, an editor and a checked writing pipeline over it.
+Production release 1.0.11, distilled from the user's Narracat Pro project: the book stays the source of truth on disk; DSH only adds a view, an editor and a checked writing pipeline over it.
 
 ## Status
 
+- v1.0.11: plugin icon artwork — the icon is back to the brand mark itself: a pure-white rounded tile with the black cat-and-book glyph, the same mark the shelf header and the right-sidebar panel use. The previous dark rounded base with a warm cat was an inverted version of that mark and read grey and warm on the light plugin card. Content, copy and the writing flow are unchanged.
 - v1.0.10: metadata/docs patch — the plugin homepage is now https://narracat.com/dsh, the package points at its GitHub repository and issue tracker, and the usage guide's linear-writing section matches the 1.0.9 one-CTA / wait-state / persistence behavior. No writing-flow behavior changes.
 - v0.1: browse + raw text editing (browser half) over a read/write API (host half).
 - v0.2: `novel` Agent preset with nine read-only book tools, six Narracat skills registered, all 16 skills copied into the bundle, and a "new writing session" button in the workbench.
