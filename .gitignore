@@ -28,5 +28,11 @@ coverage/
 *.zip
 *.log
 
+# Maintainer-only release tooling (kept local, not published with the source)
+dev/skills/
+icon-preview.html
+dev/icon-preview.html
+.tmp/
+
 # Do not ignore the sample book's .narracat directory:
 # demo/雨港来信/.narracat/ is part of the fixture.
